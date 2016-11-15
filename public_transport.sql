@@ -23,8 +23,9 @@ DROP TABLE IF EXISTS `area`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `area` (
-  `id` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -46,7 +47,11 @@ DROP TABLE IF EXISTS `area_tickets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `area_tickets` (
   `area` int(11) DEFAULT NULL,
-  `ticket` int(11) DEFAULT NULL
+  `ticket` int(11) DEFAULT NULL,
+  KEY `area` (`area`),
+  KEY `ticket` (`ticket`),
+  CONSTRAINT `area_tickets_ibfk_2` FOREIGN KEY (`ticket`) REFERENCES `tickets` (`id`),
+  CONSTRAINT `area_tickets_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -67,9 +72,10 @@ DROP TABLE IF EXISTS `day`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `day` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `holiday` tinyint(4) DEFAULT NULL,
-  `calendar` date DEFAULT NULL
+  `calendar` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -90,12 +96,21 @@ DROP TABLE IF EXISTS `departure`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `departure` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `hour` time DEFAULT NULL,
   `day` int(11) DEFAULT NULL,
   `line` int(11) DEFAULT NULL,
   `vehicle` int(11) DEFAULT NULL,
-  `driver` int(11) DEFAULT NULL
+  `driver` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `day` (`day`),
+  KEY `line` (`line`),
+  KEY `vehicle` (`vehicle`),
+  KEY `driver` (`driver`),
+  CONSTRAINT `departure_ibfk_4` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`),
+  CONSTRAINT `departure_ibfk_1` FOREIGN KEY (`day`) REFERENCES `day` (`id`),
+  CONSTRAINT `departure_ibfk_2` FOREIGN KEY (`line`) REFERENCES `line` (`id`),
+  CONSTRAINT `departure_ibfk_3` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,11 +131,14 @@ DROP TABLE IF EXISTS `difficulties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `difficulties` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `caller` int(11) DEFAULT NULL,
   `active` int(11) DEFAULT NULL,
   `line_number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `diff_type` int(11) DEFAULT NULL
+  `diff_type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `diff_type` (`diff_type`),
+  CONSTRAINT `difficulties_ibfk_1` FOREIGN KEY (`diff_type`) REFERENCES `difficulty_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -141,9 +159,10 @@ DROP TABLE IF EXISTS `difficulty_repairman`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `difficulty_repairman` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `phone` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `working_hours` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `working_hours` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -164,9 +183,10 @@ DROP TABLE IF EXISTS `difficulty_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `difficulty_type` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `repairman` int(11) DEFAULT NULL
+  `repairman` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -187,8 +207,9 @@ DROP TABLE IF EXISTS `driver`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `driver` (
-  `id` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,7 +231,11 @@ DROP TABLE IF EXISTS `driver_permission`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `driver_permission` (
   `driver` int(11) DEFAULT NULL,
-  `permission` int(11) DEFAULT NULL
+  `permission` int(11) DEFAULT NULL,
+  KEY `driver` (`driver`),
+  KEY `permission` (`permission`),
+  CONSTRAINT `driver_permission_ibfk_1` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`),
+  CONSTRAINT `driver_permission_ibfk_2` FOREIGN KEY (`permission`) REFERENCES `driving_permissions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -231,9 +256,10 @@ DROP TABLE IF EXISTS `driving_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `driving_permissions` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `full_title` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `required_document` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `required_document` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -254,10 +280,15 @@ DROP TABLE IF EXISTS `line`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `line` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `first_stop` int(11) DEFAULT NULL,
-  `last_stop` int(11) DEFAULT NULL
+  `last_stop` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `first_stop` (`first_stop`),
+  KEY `last_stop` (`last_stop`),
+  CONSTRAINT `line_ibfk_1` FOREIGN KEY (`first_stop`) REFERENCES `stop` (`id`),
+  CONSTRAINT `line_ibfk_2` FOREIGN KEY (`last_stop`) REFERENCES `stop` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -271,26 +302,27 @@ LOCK TABLES `line` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `privilige`
+-- Table structure for table `privilege`
 --
 
-DROP TABLE IF EXISTS `privilige`;
+DROP TABLE IF EXISTS `privilege`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `privilige` (
-  `id` int(11) DEFAULT NULL,
+CREATE TABLE `privilege` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `discount_percent` int(11) DEFAULT NULL,
-  `document` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `document` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `privilige`
+-- Dumping data for table `privilege`
 --
 
-LOCK TABLES `privilige` WRITE;
-/*!40000 ALTER TABLE `privilige` DISABLE KEYS */;
-/*!40000 ALTER TABLE `privilige` ENABLE KEYS */;
+LOCK TABLES `privilege` WRITE;
+/*!40000 ALTER TABLE `privilege` DISABLE KEYS */;
+/*!40000 ALTER TABLE `privilege` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -301,10 +333,11 @@ DROP TABLE IF EXISTS `schedule`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schedule` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `applies_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `applies_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `comment` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `comment` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -325,11 +358,14 @@ DROP TABLE IF EXISTS `station`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `station` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `geo_lat` int(11) DEFAULT NULL,
   `geo_lng` int(11) DEFAULT NULL,
-  `area` int(11) DEFAULT NULL
+  `area` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `area` (`area`),
+  CONSTRAINT `station_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -350,9 +386,12 @@ DROP TABLE IF EXISTS `stop`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stop` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `station` int(11) DEFAULT NULL,
-  `direction` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `direction` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `station` (`station`),
+  CONSTRAINT `stop_ibfk_1` FOREIGN KEY (`station`) REFERENCES `station` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -373,12 +412,19 @@ DROP TABLE IF EXISTS `stop_arrival`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stop_arrival` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `departure` int(11) DEFAULT NULL,
   `hour` time DEFAULT NULL,
   `day` int(11) DEFAULT NULL,
   `stop` int(11) DEFAULT NULL,
-  `stop_order` int(11) DEFAULT NULL
+  `stop_order` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `departure` (`departure`),
+  KEY `day` (`day`),
+  KEY `stop` (`stop`),
+  CONSTRAINT `stop_arrival_ibfk_3` FOREIGN KEY (`stop`) REFERENCES `stop` (`id`),
+  CONSTRAINT `stop_arrival_ibfk_1` FOREIGN KEY (`departure`) REFERENCES `departure` (`id`),
+  CONSTRAINT `stop_arrival_ibfk_2` FOREIGN KEY (`day`) REFERENCES `day` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -399,9 +445,12 @@ DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tickets` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `privilige` int(11) DEFAULT NULL
+  `privilege` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `privilege` (`privilege`),
+  CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`privilege`) REFERENCES `privilege` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -422,9 +471,10 @@ DROP TABLE IF EXISTS `user_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_roles` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `edit_permission` tinyint(1) DEFAULT NULL
+  `edit_permission` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -445,11 +495,14 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `password` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `email` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `role` int(11) DEFAULT NULL
+  `role` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role` (`role`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `user_roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -470,11 +523,14 @@ DROP TABLE IF EXISTS `vehicle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `variant` int(11) DEFAULT NULL,
   `registration_number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `value` int(11) DEFAULT NULL,
-  `cond` int(11) DEFAULT NULL
+  `cond` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cond` (`cond`),
+  CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`cond`) REFERENCES `vehicle_condition` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -495,10 +551,15 @@ DROP TABLE IF EXISTS `vehicle_breakdown`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle_breakdown` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `vehicle` int(11) DEFAULT NULL,
   `scale` int(11) DEFAULT NULL,
-  `description` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `description` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `scale` (`scale`),
+  KEY `vehicle` (`vehicle`),
+  CONSTRAINT `vehicle_breakdown_ibfk_2` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`),
+  CONSTRAINT `vehicle_breakdown_ibfk_1` FOREIGN KEY (`scale`) REFERENCES `vehicle_breakdown_scale` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -519,9 +580,10 @@ DROP TABLE IF EXISTS `vehicle_breakdown_scale`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle_breakdown_scale` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `seriousness` int(11) DEFAULT NULL,
-  `comments` varchar(255) COLLATE latin2_bin DEFAULT NULL
+  `comments` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -542,9 +604,10 @@ DROP TABLE IF EXISTS `vehicle_condition`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle_condition` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `road_suitable` tinyint(1) DEFAULT NULL
+  `road_suitable` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -566,4 +629,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-08  9:32:51
+-- Dump completed on 2016-11-15  9:15:24
