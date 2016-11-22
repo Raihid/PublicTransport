@@ -23,10 +23,10 @@ DROP TABLE IF EXISTS `area`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `area` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,6 +35,7 @@ CREATE TABLE `area` (
 
 LOCK TABLES `area` WRITE;
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
+INSERT INTO `area` VALUES (1,'Strefa miejska'),(2,'Strefa podmiejska I'),(3,'Strefa podmiejska II'),(4,'Strefa nuklearna');
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,6 +62,7 @@ CREATE TABLE `area_tickets` (
 
 LOCK TABLES `area_tickets` WRITE;
 /*!40000 ALTER TABLE `area_tickets` DISABLE KEYS */;
+INSERT INTO `area_tickets` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(2,7),(2,8),(3,7),(3,8);
 /*!40000 ALTER TABLE `area_tickets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,8 +211,9 @@ DROP TABLE IF EXISTS `driver`;
 CREATE TABLE `driver` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `pesel` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,6 +222,7 @@ CREATE TABLE `driver` (
 
 LOCK TABLES `driver` WRITE;
 /*!40000 ALTER TABLE `driver` DISABLE KEYS */;
+INSERT INTO `driver` VALUES (1,'Jan Kowalski','555555'),(2,'Marta Nowak','5555');
 /*!40000 ALTER TABLE `driver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +239,7 @@ CREATE TABLE `driver_permission` (
   KEY `driver` (`driver`),
   KEY `permission` (`permission`),
   CONSTRAINT `driver_permission_ibfk_1` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`),
-  CONSTRAINT `driver_permission_ibfk_2` FOREIGN KEY (`permission`) REFERENCES `driving_permissions` (`id`)
+  CONSTRAINT `driver_permission_ibfk_2` FOREIGN KEY (`permission`) REFERENCES `permissions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -246,30 +250,6 @@ CREATE TABLE `driver_permission` (
 LOCK TABLES `driver_permission` WRITE;
 /*!40000 ALTER TABLE `driver_permission` DISABLE KEYS */;
 /*!40000 ALTER TABLE `driver_permission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `driving_permissions`
---
-
-DROP TABLE IF EXISTS `driving_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `driving_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `full_title` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `required_document` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `driving_permissions`
---
-
-LOCK TABLES `driving_permissions` WRITE;
-/*!40000 ALTER TABLE `driving_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `driving_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -289,7 +269,7 @@ CREATE TABLE `line` (
   KEY `last_stop` (`last_stop`),
   CONSTRAINT `line_ibfk_1` FOREIGN KEY (`first_stop`) REFERENCES `stop` (`id`),
   CONSTRAINT `line_ibfk_2` FOREIGN KEY (`last_stop`) REFERENCES `stop` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,7 +278,36 @@ CREATE TABLE `line` (
 
 LOCK TABLES `line` WRITE;
 /*!40000 ALTER TABLE `line` DISABLE KEYS */;
+INSERT INTO `line` VALUES (1,'23',7,8);
 /*!40000 ALTER TABLE `line` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_title` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `required_document` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `vehicle_variant` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vehicle_variant` (`vehicle_variant`),
+  CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`vehicle_variant`) REFERENCES `vehicle_variant` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissions`
+--
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+INSERT INTO `permissions` VALUES (1,'Prowadzenie autobusu','Prawo jazdy kat. D',1),(2,'Prowadzenie tramwaju','Pozwolenie na prowadzenie tramwaju',2);
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -310,10 +319,11 @@ DROP TABLE IF EXISTS `privilege`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `privilege` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `discount_percent` int(11) DEFAULT NULL,
   `document` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -322,6 +332,7 @@ CREATE TABLE `privilege` (
 
 LOCK TABLES `privilege` WRITE;
 /*!40000 ALTER TABLE `privilege` DISABLE KEYS */;
+INSERT INTO `privilege` VALUES (1,'Student',50,'Legitymacja studencka'),(2,'Uczeń',33,'Legitymacja uczniowska'),(3,'Emetryt',100,'Karta emeryta'),(4,'Kombatant',100,'Karta kombatanta');
 /*!40000 ALTER TABLE `privilege` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +377,7 @@ CREATE TABLE `station` (
   PRIMARY KEY (`id`),
   KEY `area` (`area`),
   CONSTRAINT `station_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,6 +386,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
+INSERT INTO `station` VALUES (11,'Bieżanowska',NULL,NULL,1),(12,'Czerwone Maki',NULL,NULL,1),(13,'Kurdwanów',NULL,NULL,1),(14,'Teatr Bagatela',NULL,NULL,1),(15,'Filharmonia',NULL,NULL,1),(16,'Nowy Kleparz',NULL,NULL,1),(17,'Norymberska',NULL,NULL,1),(18,'Azory',NULL,NULL,1),(19,'Nowy Bieżanów',NULL,NULL,1),(20,'Uniwersytet Rolniczy',NULL,NULL,1);
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -392,7 +404,7 @@ CREATE TABLE `stop` (
   PRIMARY KEY (`id`),
   KEY `station` (`station`),
   CONSTRAINT `stop_ibfk_1` FOREIGN KEY (`station`) REFERENCES `station` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -401,6 +413,7 @@ CREATE TABLE `stop` (
 
 LOCK TABLES `stop` WRITE;
 /*!40000 ALTER TABLE `stop` DISABLE KEYS */;
+INSERT INTO `stop` VALUES (3,11,'Kabel'),(4,11,'Wlotowa'),(5,12,'UJ'),(6,19,'Ćwiklińskiej'),(7,19,'Pętla'),(8,12,'Pętla');
 /*!40000 ALTER TABLE `stop` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -451,7 +464,7 @@ CREATE TABLE `tickets` (
   PRIMARY KEY (`id`),
   KEY `privilege` (`privilege`),
   CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`privilege`) REFERENCES `privilege` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -460,6 +473,7 @@ CREATE TABLE `tickets` (
 
 LOCK TABLES `tickets` WRITE;
 /*!40000 ALTER TABLE `tickets` DISABLE KEYS */;
+INSERT INTO `tickets` VALUES (1,'Bilet miejski normalny',NULL),(2,'Bilet miejski studencki',1),(3,'Bilet miejski uczniowski',2),(4,'Karnet miejski normalny',NULL),(5,'Karnet miejski studencki',1),(6,'Karnet miejski uczniowski',2),(7,'Przepustka dla emerytów',3),(8,'Przepustka dla kombatantów',4);
 /*!40000 ALTER TABLE `tickets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -475,7 +489,7 @@ CREATE TABLE `user_roles` (
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `edit_permission` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -484,6 +498,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
+INSERT INTO `user_roles` VALUES (1,'Gość',0),(2,'Zarejestrowany',0),(3,'Administrator',1);
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -503,7 +518,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `user_roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -512,6 +527,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin','admin','admin@transport.com',3),(2,'Janek','hunter1','jan@janowski.pl',2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -530,8 +546,10 @@ CREATE TABLE `vehicle` (
   `cond` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cond` (`cond`),
+  KEY `variant` (`variant`),
+  CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`variant`) REFERENCES `vehicle_variant` (`id`),
   CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`cond`) REFERENCES `vehicle_condition` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -540,6 +558,7 @@ CREATE TABLE `vehicle` (
 
 LOCK TABLES `vehicle` WRITE;
 /*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
+INSERT INTO `vehicle` VALUES (1,1,'ABC-001',50000,1),(2,1,'ABC-002',20000,3),(3,2,'ABC-003',80000,1),(4,2,'ABC-004',500,5);
 /*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -584,7 +603,7 @@ CREATE TABLE `vehicle_breakdown_scale` (
   `seriousness` int(11) DEFAULT NULL,
   `comments` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -593,6 +612,7 @@ CREATE TABLE `vehicle_breakdown_scale` (
 
 LOCK TABLES `vehicle_breakdown_scale` WRITE;
 /*!40000 ALTER TABLE `vehicle_breakdown_scale` DISABLE KEYS */;
+INSERT INTO `vehicle_breakdown_scale` VALUES (1,1,'Trywialne do naprawy'),(2,2,'Łatwe do naprawy'),(3,3,'Standardowa naprawa'),(4,4,'Trudne do naprawy'),(5,5,'Bardzo trudne do naprawy'),(6,6,'Naprawa niemożliwa');
 /*!40000 ALTER TABLE `vehicle_breakdown_scale` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -608,7 +628,7 @@ CREATE TABLE `vehicle_condition` (
   `description` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `road_suitable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -617,7 +637,32 @@ CREATE TABLE `vehicle_condition` (
 
 LOCK TABLES `vehicle_condition` WRITE;
 /*!40000 ALTER TABLE `vehicle_condition` DISABLE KEYS */;
+INSERT INTO `vehicle_condition` VALUES (1,'Stan idealny',1),(2,'Stan bardzo dobry',1),(3,'Stan dobry',1),(4,'Stan dostateczny',1),(5,'Stan niedopuszczalny',0),(6,'Stan krytyczny',0),(7,'Złom',0);
 /*!40000 ALTER TABLE `vehicle_condition` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vehicle_variant`
+--
+
+DROP TABLE IF EXISTS `vehicle_variant`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vehicle_variant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vehicle_variant`
+--
+
+LOCK TABLES `vehicle_variant` WRITE;
+/*!40000 ALTER TABLE `vehicle_variant` DISABLE KEYS */;
+INSERT INTO `vehicle_variant` VALUES (1,'Autobus'),(2,'Tramwaj'),(3,'Helikopter'),(4,'Amfibia');
+/*!40000 ALTER TABLE `vehicle_variant` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -629,4 +674,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-15  9:15:24
+-- Dump completed on 2016-11-22  9:26:34
