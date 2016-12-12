@@ -1,0 +1,12 @@
+
+<h2>Bardzo poważny rozkład autobusów</h2>
+<div class="line-list">
+<% for l in @lines %>
+  <div class="line">
+  <h3><a href="/lines/<%= l["id"] %>"><%= l["number"] %></a></h3>
+  <%= "#{l["first_stop_name"]} => #{l["last_stop_name"]}" %>
+  <br/>
+  </div>
+  
+<% end %>
+</div>

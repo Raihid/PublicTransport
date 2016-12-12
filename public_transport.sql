@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.52, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.16, for Linux (x86_64)
 --
--- Host: spk-www    Database: WOLCZYK
+-- Host: localhost    Database: transport
 -- ------------------------------------------------------
--- Server version	5.5.52-0+deb7u1
+-- Server version	5.7.16-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,32 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `ar_internal_metadata`
+--
+
+DROP TABLE IF EXISTS `ar_internal_metadata`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ar_internal_metadata` (
+  `key` varchar(255) NOT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ar_internal_metadata`
+--
+
+LOCK TABLES `ar_internal_metadata` WRITE;
+/*!40000 ALTER TABLE `ar_internal_metadata` DISABLE KEYS */;
+INSERT INTO `ar_internal_metadata` VALUES ('environment','development','2016-12-12 20:06:28','2016-12-12 20:06:28');
+/*!40000 ALTER TABLE `ar_internal_metadata` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `area`
@@ -51,8 +77,8 @@ CREATE TABLE `area_tickets` (
   `ticket` int(11) DEFAULT NULL,
   KEY `area` (`area`),
   KEY `ticket` (`ticket`),
-  CONSTRAINT `area_tickets_ibfk_2` FOREIGN KEY (`ticket`) REFERENCES `tickets` (`id`),
-  CONSTRAINT `area_tickets_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`)
+  CONSTRAINT `area_tickets_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`),
+  CONSTRAINT `area_tickets_ibfk_2` FOREIGN KEY (`ticket`) REFERENCES `ticket_types` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -76,9 +102,10 @@ DROP TABLE IF EXISTS `day`;
 CREATE TABLE `day` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `holiday` tinyint(4) DEFAULT NULL,
+  `name` varchar(50) COLLATE latin2_bin DEFAULT NULL,
   `calendar` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,6 +114,7 @@ CREATE TABLE `day` (
 
 LOCK TABLES `day` WRITE;
 /*!40000 ALTER TABLE `day` DISABLE KEYS */;
+INSERT INTO `day` VALUES (1,0,'Dzień pracujący',NULL),(2,0,'Sobota',NULL),(3,1,'Niedziela',NULL),(4,1,'Nowy rok','0000-00-00');
 /*!40000 ALTER TABLE `day` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,7 +127,8 @@ DROP TABLE IF EXISTS `departure`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `departure` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `hour` time DEFAULT NULL,
+  `departure_hour` time DEFAULT NULL,
+  `arrival_hour` time DEFAULT NULL,
   `day` int(11) DEFAULT NULL,
   `line` int(11) DEFAULT NULL,
   `vehicle` int(11) DEFAULT NULL,
@@ -109,11 +138,11 @@ CREATE TABLE `departure` (
   KEY `line` (`line`),
   KEY `vehicle` (`vehicle`),
   KEY `driver` (`driver`),
-  CONSTRAINT `departure_ibfk_4` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`),
   CONSTRAINT `departure_ibfk_1` FOREIGN KEY (`day`) REFERENCES `day` (`id`),
-  CONSTRAINT `departure_ibfk_2` FOREIGN KEY (`line`) REFERENCES `line` (`id`),
-  CONSTRAINT `departure_ibfk_3` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+  CONSTRAINT `departure_ibfk_2` FOREIGN KEY (`line`) REFERENCES `lines` (`id`),
+  CONSTRAINT `departure_ibfk_3` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`),
+  CONSTRAINT `departure_ibfk_4` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,6 +151,7 @@ CREATE TABLE `departure` (
 
 LOCK TABLES `departure` WRITE;
 /*!40000 ALTER TABLE `departure` DISABLE KEYS */;
+INSERT INTO `departure` VALUES (1,'06:30:00','07:15:00',1,1,3,1),(2,'07:00:00','07:45:00',1,1,1,2),(3,'07:30:00','08:15:00',1,1,3,1),(4,'08:00:00','08:45:00',1,1,1,2),(5,'08:30:00','09:15:00',1,1,3,1),(6,'09:00:00','09:45:00',1,1,1,2),(7,'09:30:00','10:15:00',1,1,3,1),(8,'15:31:00','16:00:00',1,3,2,3),(9,'16:01:00','16:30:00',1,4,2,3),(10,'16:31:00','17:00:00',1,3,2,3),(11,'17:01:00','17:30:00',1,4,2,3);
 /*!40000 ALTER TABLE `departure` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,8 +242,11 @@ CREATE TABLE `driver` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `pesel` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `driver_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +255,7 @@ CREATE TABLE `driver` (
 
 LOCK TABLES `driver` WRITE;
 /*!40000 ALTER TABLE `driver` DISABLE KEYS */;
-INSERT INTO `driver` VALUES (1,'Jan Kowalski','555555'),(2,'Marta Nowak','5555');
+INSERT INTO `driver` VALUES (1,'Jan Kowalski','555555',NULL),(2,'Marta Nowak','5555',NULL),(3,'Kamil Pędziwilk','5555',NULL),(4,'Robert Sańko','5555',NULL);
 /*!40000 ALTER TABLE `driver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,13 +286,13 @@ LOCK TABLES `driver_permission` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `line`
+-- Table structure for table `lines`
 --
 
-DROP TABLE IF EXISTS `line`;
+DROP TABLE IF EXISTS `lines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `line` (
+CREATE TABLE `lines` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `first_stop` int(11) DEFAULT NULL,
@@ -267,19 +300,19 @@ CREATE TABLE `line` (
   PRIMARY KEY (`id`),
   KEY `first_stop` (`first_stop`),
   KEY `last_stop` (`last_stop`),
-  CONSTRAINT `line_ibfk_1` FOREIGN KEY (`first_stop`) REFERENCES `stop` (`id`),
-  CONSTRAINT `line_ibfk_2` FOREIGN KEY (`last_stop`) REFERENCES `stop` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+  CONSTRAINT `lines_ibfk_1` FOREIGN KEY (`first_stop`) REFERENCES `stops` (`id`),
+  CONSTRAINT `lines_ibfk_2` FOREIGN KEY (`last_stop`) REFERENCES `stops` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `line`
+-- Dumping data for table `lines`
 --
 
-LOCK TABLES `line` WRITE;
-/*!40000 ALTER TABLE `line` DISABLE KEYS */;
-INSERT INTO `line` VALUES (1,'23',7,8);
-/*!40000 ALTER TABLE `line` ENABLE KEYS */;
+LOCK TABLES `lines` WRITE;
+/*!40000 ALTER TABLE `lines` DISABLE KEYS */;
+INSERT INTO `lines` VALUES (1,'23',2,3),(2,'23',3,2),(3,'18',2,4),(4,'18',4,2),(5,'8',5,6),(6,'8',6,5);
+/*!40000 ALTER TABLE `lines` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -337,6 +370,39 @@ INSERT INTO `privilege` VALUES (1,'Student',50,'Legitymacja studencka'),(2,'Ucze
 UNLOCK TABLES;
 
 --
+-- Table structure for table `route_part`
+--
+
+DROP TABLE IF EXISTS `route_part`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `route_part` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `departure` int(11) DEFAULT NULL,
+  `hour` time DEFAULT NULL,
+  `day` int(11) DEFAULT NULL,
+  `stop` int(11) DEFAULT NULL,
+  `stop_order` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `departure` (`departure`),
+  KEY `day` (`day`),
+  KEY `stop` (`stop`),
+  CONSTRAINT `route_part_ibfk_1` FOREIGN KEY (`departure`) REFERENCES `departure` (`id`),
+  CONSTRAINT `route_part_ibfk_2` FOREIGN KEY (`day`) REFERENCES `day` (`id`),
+  CONSTRAINT `route_part_ibfk_3` FOREIGN KEY (`stop`) REFERENCES `stops` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `route_part`
+--
+
+LOCK TABLES `route_part` WRITE;
+/*!40000 ALTER TABLE `route_part` DISABLE KEYS */;
+/*!40000 ALTER TABLE `route_part` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `schedule`
 --
 
@@ -362,13 +428,35 @@ LOCK TABLES `schedule` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `station`
+-- Table structure for table `schema_migrations`
 --
 
-DROP TABLE IF EXISTS `station`;
+DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `station` (
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) NOT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schema_migrations`
+--
+
+LOCK TABLES `schema_migrations` WRITE;
+/*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stops`
+--
+
+DROP TABLE IF EXISTS `stops`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stops` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `geo_lat` int(11) DEFAULT NULL,
@@ -376,78 +464,46 @@ CREATE TABLE `station` (
   `area` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `area` (`area`),
-  CONSTRAINT `station_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+  CONSTRAINT `stops_ibfk_1` FOREIGN KEY (`area`) REFERENCES `area` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `station`
+-- Dumping data for table `stops`
 --
 
-LOCK TABLES `station` WRITE;
-/*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (11,'Bieżanowska',NULL,NULL,1),(12,'Czerwone Maki',NULL,NULL,1),(13,'Kurdwanów',NULL,NULL,1),(14,'Teatr Bagatela',NULL,NULL,1),(15,'Filharmonia',NULL,NULL,1),(16,'Nowy Kleparz',NULL,NULL,1),(17,'Norymberska',NULL,NULL,1),(18,'Azory',NULL,NULL,1),(19,'Nowy Bieżanów',NULL,NULL,1),(20,'Uniwersytet Rolniczy',NULL,NULL,1);
-/*!40000 ALTER TABLE `station` ENABLE KEYS */;
+LOCK TABLES `stops` WRITE;
+/*!40000 ALTER TABLE `stops` DISABLE KEYS */;
+INSERT INTO `stops` VALUES (1,'Bieżanowska',NULL,NULL,1),(2,'Czerwone Maki',NULL,NULL,1),(3,'Nowy Bieżanów',NULL,NULL,1),(4,'Krowodrza Górka',NULL,NULL,1),(5,'Bronowice',NULL,NULL,1),(6,'Borek Fałęcki',NULL,NULL,1),(7,'Kurdwanów',NULL,NULL,1),(8,'Teatr Bagatela',NULL,NULL,1),(9,'Filharmonia',NULL,NULL,1),(10,'Nowy Kleparz',NULL,NULL,1),(11,'Norymberska',NULL,NULL,1),(12,'Azory',NULL,NULL,1),(13,'Uniwersytet Rolniczy',NULL,NULL,1),(14,'Salwator',NULL,NULL,1),(15,'Salwator',NULL,NULL,1),(16,'Borek Fałęcki',NULL,NULL,1),(17,'Filharmonia',NULL,NULL,1),(18,'Cichy Kącik',NULL,NULL,1),(19,'Dworzec Towarowy',NULL,NULL,1);
+/*!40000 ALTER TABLE `stops` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `stop`
+-- Table structure for table `ticket_types`
 --
 
-DROP TABLE IF EXISTS `stop`;
+DROP TABLE IF EXISTS `ticket_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stop` (
+CREATE TABLE `ticket_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `station` int(11) DEFAULT NULL,
-  `direction` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `privilege` int(11) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `station` (`station`),
-  CONSTRAINT `stop_ibfk_1` FOREIGN KEY (`station`) REFERENCES `station` (`id`)
+  KEY `privilege` (`privilege`),
+  CONSTRAINT `ticket_types_ibfk_1` FOREIGN KEY (`privilege`) REFERENCES `privilege` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stop`
+-- Dumping data for table `ticket_types`
 --
 
-LOCK TABLES `stop` WRITE;
-/*!40000 ALTER TABLE `stop` DISABLE KEYS */;
-INSERT INTO `stop` VALUES (3,11,'Kabel'),(4,11,'Wlotowa'),(5,12,'UJ'),(6,19,'Ćwiklińskiej'),(7,19,'Pętla'),(8,12,'Pętla');
-/*!40000 ALTER TABLE `stop` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `stop_arrival`
---
-
-DROP TABLE IF EXISTS `stop_arrival`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stop_arrival` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `departure` int(11) DEFAULT NULL,
-  `hour` time DEFAULT NULL,
-  `day` int(11) DEFAULT NULL,
-  `stop` int(11) DEFAULT NULL,
-  `stop_order` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `departure` (`departure`),
-  KEY `day` (`day`),
-  KEY `stop` (`stop`),
-  CONSTRAINT `stop_arrival_ibfk_3` FOREIGN KEY (`stop`) REFERENCES `stop` (`id`),
-  CONSTRAINT `stop_arrival_ibfk_1` FOREIGN KEY (`departure`) REFERENCES `departure` (`id`),
-  CONSTRAINT `stop_arrival_ibfk_2` FOREIGN KEY (`day`) REFERENCES `day` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stop_arrival`
---
-
-LOCK TABLES `stop_arrival` WRITE;
-/*!40000 ALTER TABLE `stop_arrival` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stop_arrival` ENABLE KEYS */;
+LOCK TABLES `ticket_types` WRITE;
+/*!40000 ALTER TABLE `ticket_types` DISABLE KEYS */;
+INSERT INTO `ticket_types` VALUES (1,'Bilet miejski normalny',NULL,NULL),(2,'Bilet miejski studencki',1,NULL),(3,'Bilet miejski uczniowski',2,NULL),(4,'Karnet miejski normalny',NULL,NULL),(5,'Karnet miejski studencki',1,NULL),(6,'Karnet miejski uczniowski',2,NULL),(7,'Przepustka dla emerytów',3,NULL),(8,'Przepustka dla kombatantów',4,NULL);
+/*!40000 ALTER TABLE `ticket_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -459,12 +515,12 @@ DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tickets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `privilege` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `privilege` (`privilege`),
-  CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`privilege`) REFERENCES `privilege` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+  `name` varchar(100) DEFAULT NULL,
+  `ticket_type` int(11) DEFAULT NULL,
+  `valid_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `valid_to` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -473,7 +529,6 @@ CREATE TABLE `tickets` (
 
 LOCK TABLES `tickets` WRITE;
 /*!40000 ALTER TABLE `tickets` DISABLE KEYS */;
-INSERT INTO `tickets` VALUES (1,'Bilet miejski normalny',NULL),(2,'Bilet miejski studencki',1),(3,'Bilet miejski uczniowski',2),(4,'Karnet miejski normalny',NULL),(5,'Karnet miejski studencki',1),(6,'Karnet miejski uczniowski',2),(7,'Przepustka dla emerytów',3),(8,'Przepustka dla kombatantów',4);
 /*!40000 ALTER TABLE `tickets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -489,7 +544,7 @@ CREATE TABLE `user_roles` (
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `edit_permission` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -498,7 +553,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (1,'Gość',0),(2,'Zarejestrowany',0),(3,'Administrator',1);
+INSERT INTO `user_roles` VALUES (1,'Gość',0),(2,'Zarejestrowany',0),(3,'Administrator',1),(4,'Kierowca',0);
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -515,6 +570,7 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `email` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `role` int(11) DEFAULT NULL,
+  `transport_points` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `user_roles` (`id`)
@@ -527,7 +583,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','admin','admin@transport.com',3),(2,'Janek','hunter1','jan@janowski.pl',2);
+INSERT INTO `users` VALUES (1,'admin','admin','admin@transport.com',3,NULL),(2,'Janek','hunter1','jan@janowski.pl',2,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -547,8 +603,8 @@ CREATE TABLE `vehicle` (
   PRIMARY KEY (`id`),
   KEY `cond` (`cond`),
   KEY `variant` (`variant`),
-  CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`variant`) REFERENCES `vehicle_variant` (`id`),
-  CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`cond`) REFERENCES `vehicle_condition` (`id`)
+  CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`cond`) REFERENCES `vehicle_condition` (`id`),
+  CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`variant`) REFERENCES `vehicle_variant` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -577,8 +633,8 @@ CREATE TABLE `vehicle_breakdown` (
   PRIMARY KEY (`id`),
   KEY `scale` (`scale`),
   KEY `vehicle` (`vehicle`),
-  CONSTRAINT `vehicle_breakdown_ibfk_2` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`),
-  CONSTRAINT `vehicle_breakdown_ibfk_1` FOREIGN KEY (`scale`) REFERENCES `vehicle_breakdown_scale` (`id`)
+  CONSTRAINT `vehicle_breakdown_ibfk_1` FOREIGN KEY (`scale`) REFERENCES `vehicle_breakdown_scale` (`id`),
+  CONSTRAINT `vehicle_breakdown_ibfk_2` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -674,4 +730,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-22  9:26:34
+-- Dump completed on 2016-12-12 23:25:26
