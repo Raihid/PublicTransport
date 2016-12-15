@@ -74,12 +74,28 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["permission"], name: "permission", using: :btree
   end
 
-  create_table "line", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin" do |t|
+  create_table "line_stops", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer "line_id"
+    t.integer "stop_id"
+    t.integer "order_no"
+    t.index ["line_id"], name: "line_id", using: :btree
+    t.index ["stop_id"], name: "stop_id", using: :btree
+  end
+
+  create_table "lines", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin" do |t|
     t.string  "number"
     t.integer "first_stop"
     t.integer "last_stop"
     t.index ["first_stop"], name: "first_stop", using: :btree
     t.index ["last_stop"], name: "last_stop", using: :btree
+  end
+
+  create_table "lines_stops", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer "line_id"
+    t.integer "stop_id"
+    t.integer "order_no"
+    t.index ["line_id"], name: "line_id", using: :btree
+    t.index ["stop_id"], name: "stop_id", using: :btree
   end
 
   create_table "permissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin" do |t|
@@ -112,7 +128,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string   "comment"
   end
 
-  create_table "stop", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin" do |t|
+  create_table "stops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin" do |t|
     t.string  "name"
     t.integer "geo_lat"
     t.integer "geo_lng"
@@ -183,19 +199,23 @@ ActiveRecord::Schema.define(version: 0) do
   add_foreign_key "area_tickets", "ticket_types", column: "ticket", name: "area_tickets_ibfk_2"
   add_foreign_key "departure", "day", column: "day", name: "departure_ibfk_1"
   add_foreign_key "departure", "driver", column: "driver", name: "departure_ibfk_4"
-  add_foreign_key "departure", "line", column: "line", name: "departure_ibfk_2"
+  add_foreign_key "departure", "lines", column: "line", name: "departure_ibfk_2"
   add_foreign_key "departure", "vehicle", column: "vehicle", name: "departure_ibfk_3"
   add_foreign_key "difficulties", "difficulty_type", column: "diff_type", name: "difficulties_ibfk_1"
   add_foreign_key "driver", "users", name: "driver_ibfk_1"
   add_foreign_key "driver_permission", "driver", column: "driver", name: "driver_permission_ibfk_1"
   add_foreign_key "driver_permission", "permissions", column: "permission", name: "driver_permission_ibfk_2"
-  add_foreign_key "line", "stop", column: "first_stop", name: "line_ibfk_1"
-  add_foreign_key "line", "stop", column: "last_stop", name: "line_ibfk_2"
+  add_foreign_key "line_stops", "lines", name: "line_stops_ibfk_1"
+  add_foreign_key "line_stops", "stops", name: "line_stops_ibfk_2"
+  add_foreign_key "lines", "stops", column: "first_stop", name: "lines_ibfk_1"
+  add_foreign_key "lines", "stops", column: "last_stop", name: "lines_ibfk_2"
+  add_foreign_key "lines_stops", "lines", name: "lines_stops_ibfk_1"
+  add_foreign_key "lines_stops", "stops", name: "lines_stops_ibfk_2"
   add_foreign_key "permissions", "vehicle_variant", column: "vehicle_variant", name: "permissions_ibfk_1"
   add_foreign_key "route_part", "day", column: "day", name: "route_part_ibfk_2"
   add_foreign_key "route_part", "departure", column: "departure", name: "route_part_ibfk_1"
-  add_foreign_key "route_part", "stop", column: "stop", name: "route_part_ibfk_3"
-  add_foreign_key "stop", "area", column: "area", name: "stop_ibfk_1"
+  add_foreign_key "route_part", "stops", column: "stop", name: "route_part_ibfk_3"
+  add_foreign_key "stops", "area", column: "area", name: "stops_ibfk_1"
   add_foreign_key "ticket_types", "privilege", column: "privilege", name: "ticket_types_ibfk_1"
   add_foreign_key "users", "user_roles", column: "role", name: "users_ibfk_1"
   add_foreign_key "vehicle", "vehicle_condition", column: "cond", name: "vehicle_ibfk_1"

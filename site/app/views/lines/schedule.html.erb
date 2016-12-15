@@ -1,0 +1,7 @@
+
+<h3 class="page-header">Odjazdy z przystanku <%= @stop.name %> dla linii <%= @line.number %></h3>
+<ul>
+<% @departures.each do |departure| %> 
+  <li> <%= departure["hour"] %> </li>
+ <% end %>
+ </ul>

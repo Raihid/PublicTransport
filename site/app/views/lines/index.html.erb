@@ -4,7 +4,7 @@
 <% for l in @lines %>
   <div class="line">
   <h3><a href="/lines/<%= l["id"] %>"><%= l["number"] %></a></h3>
-  <%= "#{l["first_stop_name"]} => #{l["last_stop_name"]}" %>
+  <p><%= "#{l["first_stop_name"]} => #{l["last_stop_name"]}" %></p>
   <br/>
   </div>
   

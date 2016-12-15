@@ -1,0 +1,13 @@
+
+<h2 class="page-header">Bardzo poważny rozkład autobusów</h2>
+  <div class="line-routes">
+  <h3><a href="/lines/<%= @line["id"] %>"><%= @line["number"] %></a></h3>
+    Trasa:
+    <ul>
+    <% @stops.each do |stop| %>
+      <li><a href="/stops/<%= stop["id"] %>"><%= stop["name"] %></a></li>
+    <% end %>
+    </ul>
+  <br/>
+  
+</div>

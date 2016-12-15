@@ -1,0 +1,10 @@
+Dzień dobry, z tej strony przystanek <h3><%= "#{@stop.name}!" %></h3>Takie linie po mnie jeżdżą:
+<ul>
+<% @lines.each do |line| %>
+  <li><a href="/line/<%=line["id"]%>"><%= line["number"] %></a></li>
+<% end %>
+
+<% @departures.each do |departure| %>
+  <%= "#{departure["number"]} - #{departure["hour"]}" %>
+<% end %>
+</ul>
