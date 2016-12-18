@@ -1,0 +1,6 @@
+Odnalezieni kierowcy: <br/>
+<% @drivers.each do |driver| %>
+  <%= driver["name"] %> <br/>
+<% end %>
+
+Liczba odnalezionych kierowców: <%= @count %> 

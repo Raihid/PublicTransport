@@ -1,0 +1,8 @@
+Lista posiadanego przez nas sprzętu
+<% @vehicles.each do |vehicle| %>
+<div class="vehicle">
+  <%= "#{vehicle["variant"]} o numerze rejestracyjnym #{vehicle["registration_number"]} jest wart #{vehicle["value"]}zł. Jego stan: #{vehicle["vcondition"]}." %><br/>
+  Ocena ogółem: <%= vehicle["score"] %>
+</div>
+<% end %>
+Średnia jakość naszych pojazdów wynosi <strong><%= @average %></strong>/6.

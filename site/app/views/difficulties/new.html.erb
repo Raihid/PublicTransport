@@ -1,0 +1,15 @@
+<h1>Dodaj utrudnienie</h1>
+<%= form_for :difficulty, url: difficulties_path do |f| %>
+  <p>
+  <%= f.label :description %><br/>
+    <%= f.text_area :description %>  
+  </p>
+  
+    <%= f.select(:line, options_for_select(@lines_options)) %>
+    <%= f.select(:diff_type, options_for_select(@diff_types_options)) %>
+    <p>
+        <%= f.submit %>
+    </p>
+<% end %>
+
+

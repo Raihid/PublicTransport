@@ -3,12 +3,12 @@
 </div>
 <div id="menu">
   <ul>
-    <li>Strona główna</li>
-    <li>Rozkłady</li>
-    <li>Zgłoś awarię</li>
-    <li>Nasi kierowcy</li>
-    <li>Nasze pojazdy</li>
-    <li>Kontakt</li>
+    <li><a href="">Strona główna</a></li>
+    <li><%= link_to "Rozkłady", schedule_index_path() %></li>
+    <li><%= link_to "Awarie", difficulties_path() %></li>
+    <li><%= link_to "Nasi kierowcy",  drivers_path() %></li>
+    <li><a href="/vehicles">Nasze pojazdy</a></li>
+    <li><a href="/contact">Kontakt</a></li>
   </ul>
 </div>
 

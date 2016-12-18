@@ -1,0 +1,16 @@
+table count: at least 15 # Wrzucaj je wszędzie
+joins: left, inner, right, union  - 5 # Więcej nie-inner
+select, insert, delete - ?!?! # Mało update'ów 
+transactions - 5 # Kupowanie biletów, dodawanie linii?...
+procedures - 1 # Co jeszcze?
+--- functions - 0 # Yay!
+full-text search - 1
+triggers - 2 # Sprawdz czy kierowca nie ma w tym czase innej linii na głowie
+--- views - 0
+--- aggregation functions - 0 # Funkcja, vehicles i coś jeszcze
+constraints: unique, foreign - 3, 0 # No ziom
+--- subqueries - 0
+like - 1 # użytkownicy, wyszukiwanie kierowcy
+between - 2 # wyszukiwanie linii 
+--- order - 0 # proste, znajdzie się gdziekolwiek
+

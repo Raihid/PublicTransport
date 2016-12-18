@@ -1,0 +1,8 @@
+<p>Poniżej znajdą Państwo naszych utalentowanych kierowców!</p>
+<div class="driver">
+<% @drivers.each do |driver| %>
+  <div><strong>Imię i nazwisko: </strong> <%= driver["name"] %></div>
+  <div><strong>Posiadanie uprawnienia: </strong> <%= driver["full_title"] ? driver["full_title"] : "Brak uprawnień" %></div>
+  
+<% end %>
+</div>

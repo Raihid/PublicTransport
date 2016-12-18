@@ -3,12 +3,13 @@ Rails.application.routes.draw do
   root 'schedule#index'
 
   get 'lines/:line_id/:id' => 'lines#schedule'
+  get 'drivers/search/:name' => 'drivers#search'
   resources :lines
   resources :departures
   resources :stops
   resources :vehicles
   resources :drivers
-  resources :scheduled
+  resources :difficulties
 
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

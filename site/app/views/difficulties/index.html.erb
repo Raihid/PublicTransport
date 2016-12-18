@@ -1,0 +1,11 @@
+<h1>Lista aktualnych utrudnień</h1>
+<p class="count"> W systemie znajduje się aktualnie <%= @count %> awarii.
+</p>
+<p>
+<% @difficulties.each do |difficulty| %>
+  <a href="/difficulties/<%= difficulty["id"] %>"><%= difficulty["id"] %></a>
+  Na linii numer <strong><%= difficulty["number"] %></strong>
+  <%= difficulty["description"] %>
+</p>
+<% end %>
+<%= link_to "Zgłoś nową awarię", new_difficulty_path() %>

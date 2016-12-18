@@ -140,8 +140,8 @@ CREATE TABLE `departures` (
   KEY `driver` (`driver`),
   CONSTRAINT `departures_ibfk_1` FOREIGN KEY (`day`) REFERENCES `day` (`id`),
   CONSTRAINT `departures_ibfk_2` FOREIGN KEY (`line`) REFERENCES `lines` (`id`),
-  CONSTRAINT `departures_ibfk_3` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`),
-  CONSTRAINT `departures_ibfk_4` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`)
+  CONSTRAINT `departures_ibfk_3` FOREIGN KEY (`vehicle`) REFERENCES `vehicles` (`id`),
+  CONSTRAINT `departures_ibfk_4` FOREIGN KEY (`driver`) REFERENCES `drivers` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -166,12 +166,13 @@ CREATE TABLE `difficulties` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `caller` int(11) DEFAULT NULL,
   `active` int(11) DEFAULT NULL,
-  `line_number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `description` varchar(1000) COLLATE latin2_bin DEFAULT NULL,
+  `line` int(11) DEFAULT NULL,
   `diff_type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `diff_type` (`diff_type`),
   CONSTRAINT `difficulties_ibfk_1` FOREIGN KEY (`diff_type`) REFERENCES `difficulty_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,6 +181,7 @@ CREATE TABLE `difficulties` (
 
 LOCK TABLES `difficulties` WRITE;
 /*!40000 ALTER TABLE `difficulties` DISABLE KEYS */;
+INSERT INTO `difficulties` VALUES (10,NULL,NULL,'Bardzo smutna wiadomość',1,NULL),(11,NULL,NULL,'Człowiek w czerni się awanturuje.',1,NULL),(12,NULL,NULL,'Sowy nie są tym, czym się wydają.',1,3),(13,NULL,NULL,'She\'s dead, wrapped in plastic.',1,7),(14,NULL,NULL,'Gołąb spłonął na kablu.',5,1),(15,NULL,NULL,'Za gorąco, ej.',1,2);
 /*!40000 ALTER TABLE `difficulties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,10 +194,11 @@ DROP TABLE IF EXISTS `difficulty_repairman`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `difficulty_repairman` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE latin2_bin DEFAULT NULL,
   `phone` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `working_hours` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,6 +207,7 @@ CREATE TABLE `difficulty_repairman` (
 
 LOCK TABLES `difficulty_repairman` WRITE;
 /*!40000 ALTER TABLE `difficulty_repairman` DISABLE KEYS */;
+INSERT INTO `difficulty_repairman` VALUES (1,'TramWorld','555555555','08:00 - 16:00'),(2,'Straż miejska','997','00:00 - 23:59'),(3,'Ghostbusters','555-2368','06:00 - 18:00'),(4,'FBI','Powiedz na głos trzy razy \"Moje najgorsze koszmary nie przewidziały tego co się stało\"','12:00 - 13:00');
 /*!40000 ALTER TABLE `difficulty_repairman` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +223,7 @@ CREATE TABLE `difficulty_type` (
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `repairman` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,62 +232,80 @@ CREATE TABLE `difficulty_type` (
 
 LOCK TABLES `difficulty_type` WRITE;
 /*!40000 ALTER TABLE `difficulty_type` DISABLE KEYS */;
+INSERT INTO `difficulty_type` VALUES (1,'Przerwana linia trakcyjna',1),(2,'Pęknięcie szyny',1),(3,'Niebezpieczny pasażer',2),(4,'Gapowicz bez biletu',2),(5,'Sowy nie są tym, czym się wydają',4),(6,'Poltergeist na wolności',3),(7,'Morderstwo Laury Palmer',4);
 /*!40000 ALTER TABLE `difficulty_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `driver`
+-- Table structure for table `driver_permissions`
 --
 
-DROP TABLE IF EXISTS `driver`;
+DROP TABLE IF EXISTS `driver_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `driver` (
+CREATE TABLE `driver_permissions` (
+  `driver` int(11) DEFAULT NULL,
+  `permission` int(11) DEFAULT NULL,
+  KEY `driver` (`driver`),
+  KEY `permission` (`permission`),
+  CONSTRAINT `driver_permissions_ibfk_1` FOREIGN KEY (`driver`) REFERENCES `drivers` (`id`),
+  CONSTRAINT `driver_permissions_ibfk_2` FOREIGN KEY (`permission`) REFERENCES `permissions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `driver_permissions`
+--
+
+LOCK TABLES `driver_permissions` WRITE;
+/*!40000 ALTER TABLE `driver_permissions` DISABLE KEYS */;
+INSERT INTO `driver_permissions` VALUES (1,1),(1,2),(2,1);
+/*!40000 ALTER TABLE `driver_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `drivers`
+--
+
+DROP TABLE IF EXISTS `drivers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drivers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `pesel` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `driver_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `drivers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `driver`
+-- Dumping data for table `drivers`
 --
 
-LOCK TABLES `driver` WRITE;
-/*!40000 ALTER TABLE `driver` DISABLE KEYS */;
-INSERT INTO `driver` VALUES (1,'Jan Kowalski','555555',NULL),(2,'Marta Nowak','5555',NULL),(3,'Kamil Pędziwilk','5555',NULL),(4,'Robert Sańko','5555',NULL);
-/*!40000 ALTER TABLE `driver` ENABLE KEYS */;
+LOCK TABLES `drivers` WRITE;
+/*!40000 ALTER TABLE `drivers` DISABLE KEYS */;
+INSERT INTO `drivers` VALUES (1,'Jan Kowalski','555555',NULL),(2,'Marta Nowak','5555',NULL),(3,'Kamil Pędziwilk','5555',NULL),(4,'Robert Sańko','5555',NULL);
+/*!40000 ALTER TABLE `drivers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `driver_permission`
+-- Temporary view structure for view `drivers_possible_vehicles`
 --
 
-DROP TABLE IF EXISTS `driver_permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `driver_permission` (
-  `driver` int(11) DEFAULT NULL,
-  `permission` int(11) DEFAULT NULL,
-  KEY `driver` (`driver`),
-  KEY `permission` (`permission`),
-  CONSTRAINT `driver_permission_ibfk_1` FOREIGN KEY (`driver`) REFERENCES `driver` (`id`),
-  CONSTRAINT `driver_permission_ibfk_2` FOREIGN KEY (`permission`) REFERENCES `permissions` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `driver_permission`
---
-
-LOCK TABLES `driver_permission` WRITE;
-/*!40000 ALTER TABLE `driver_permission` DISABLE KEYS */;
-/*!40000 ALTER TABLE `driver_permission` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `drivers_possible_vehicles`;
+/*!50001 DROP VIEW IF EXISTS `drivers_possible_vehicles`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `drivers_possible_vehicles` AS SELECT 
+ 1 AS `id`,
+ 1 AS `name`,
+ 1 AS `vehicle_id`,
+ 1 AS `registration_number`,
+ 1 AS `description`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `line_stops`
@@ -341,6 +363,22 @@ LOCK TABLES `lines` WRITE;
 INSERT INTO `lines` VALUES (1,'23',2,3),(2,'23',3,2),(3,'18',2,4),(4,'18',4,2),(5,'8',5,6),(6,'8',6,5),(7,'13',3,5),(8,'13',5,3);
 /*!40000 ALTER TABLE `lines` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `lines_routes`
+--
+
+DROP TABLE IF EXISTS `lines_routes`;
+/*!50001 DROP VIEW IF EXISTS `lines_routes`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `lines_routes` AS SELECT 
+ 1 AS `id`,
+ 1 AS `number`,
+ 1 AS `first_stop`,
+ 1 AS `last_stop`,
+ 1 AS `GROUP_CONCAT(stops.name SEPARATOR ', ')`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `lines_stops`
@@ -638,37 +676,6 @@ INSERT INTO `users` VALUES (1,'admin','admin','admin@transport.com',3,NULL),(2,'
 UNLOCK TABLES;
 
 --
--- Table structure for table `vehicle`
---
-
-DROP TABLE IF EXISTS `vehicle`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vehicle` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `variant` int(11) DEFAULT NULL,
-  `registration_number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  `value` int(11) DEFAULT NULL,
-  `cond` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `cond` (`cond`),
-  KEY `variant` (`variant`),
-  CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`cond`) REFERENCES `vehicle_condition` (`id`),
-  CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`variant`) REFERENCES `vehicle_variant` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vehicle`
---
-
-LOCK TABLES `vehicle` WRITE;
-/*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
-INSERT INTO `vehicle` VALUES (1,1,'ABC-001',50000,1),(2,1,'ABC-002',20000,3),(3,2,'ABC-003',80000,1),(4,2,'ABC-004',500,5);
-/*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `vehicle_breakdown`
 --
 
@@ -684,7 +691,7 @@ CREATE TABLE `vehicle_breakdown` (
   KEY `scale` (`scale`),
   KEY `vehicle` (`vehicle`),
   CONSTRAINT `vehicle_breakdown_ibfk_1` FOREIGN KEY (`scale`) REFERENCES `vehicle_breakdown_scale` (`id`),
-  CONSTRAINT `vehicle_breakdown_ibfk_2` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`)
+  CONSTRAINT `vehicle_breakdown_ibfk_2` FOREIGN KEY (`vehicle`) REFERENCES `vehicles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -731,6 +738,7 @@ DROP TABLE IF EXISTS `vehicle_condition`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle_condition` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `score` int(11) DEFAULT NULL,
   `description` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   `road_suitable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -743,7 +751,7 @@ CREATE TABLE `vehicle_condition` (
 
 LOCK TABLES `vehicle_condition` WRITE;
 /*!40000 ALTER TABLE `vehicle_condition` DISABLE KEYS */;
-INSERT INTO `vehicle_condition` VALUES (1,'Stan idealny',1),(2,'Stan bardzo dobry',1),(3,'Stan dobry',1),(4,'Stan dostateczny',1),(5,'Stan niedopuszczalny',0),(6,'Stan krytyczny',0),(7,'Złom',0);
+INSERT INTO `vehicle_condition` VALUES (1,6,'Stan idealny',1),(2,5,'Stan bardzo dobry',1),(3,4,'Stan dobry',1),(4,3,'Stan dostateczny',1),(5,2,'Stan niedopuszczalny',0),(6,1,'Złom',0);
 /*!40000 ALTER TABLE `vehicle_condition` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -770,6 +778,136 @@ LOCK TABLES `vehicle_variant` WRITE;
 INSERT INTO `vehicle_variant` VALUES (1,'Autobus'),(2,'Tramwaj'),(3,'Helikopter'),(4,'Amfibia');
 /*!40000 ALTER TABLE `vehicle_variant` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `vehicles`
+--
+
+DROP TABLE IF EXISTS `vehicles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vehicles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `variant` int(11) DEFAULT NULL,
+  `registration_number` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `value` int(11) DEFAULT NULL,
+  `cond` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cond` (`cond`),
+  KEY `variant` (`variant`),
+  CONSTRAINT `vehicles_ibfk_1` FOREIGN KEY (`cond`) REFERENCES `vehicle_condition` (`id`),
+  CONSTRAINT `vehicles_ibfk_2` FOREIGN KEY (`variant`) REFERENCES `vehicle_variant` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vehicles`
+--
+
+LOCK TABLES `vehicles` WRITE;
+/*!40000 ALTER TABLE `vehicles` DISABLE KEYS */;
+INSERT INTO `vehicles` VALUES (1,1,'ABC-001',50000,1),(2,1,'ABC-002',20000,3),(3,2,'ABC-003',80000,1),(4,2,'ABC-004',500,5);
+/*!40000 ALTER TABLE `vehicles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'transport'
+--
+/*!50003 DROP FUNCTION IF EXISTS `averageTimeDistance` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`rahid`@`localhost` FUNCTION `averageTimeDistance`(line_id int) RETURNS decimal(10,0)
+    DETERMINISTIC
+BEGIN DECLARE avg decimal; SELECT AVG(UNIX_TIMESTAMP(departures.arrival_hour)- UNIX_TIMESTAMP(departures.departure_hour))/60.0 FROM `lines` INNER JOIN departures ON departures.line = `lines`.id WHERE `lines`.id = line_id INTO avg; RETURN avg; END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `CalcGeoDist` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`rahid`@`localhost` FUNCTION `CalcGeoDist`(lat_1 decimal, lng_1 decimal, lat_2 decimal, lng_2 decimal) RETURNS decimal(10,0)
+    DETERMINISTIC
+BEGIN DECLARE dist decimal; RETURN ((ACOS(SIN(lat_1 * PI() / 180) * SIN(lat_2 * PI()/180) + COS(lat_1 * PI()/180) * COS(lat_2 * PI() / 180) * COS((lng_1 - lng_2) * PI() / 180)) * 180 / PI()) * 60 * 1.1515); END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `HowToGetThere` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`rahid`@`localhost` PROCEDURE `HowToGetThere`(OUT departure_id int, OUT arrival_time time, IN first_stop_id int, IN target_stop_id int)
+BEGIN SELECT final_route.departure, final_route.hour FROM lines_stops as first_stop INNER JOIN lines_stops as target_stop ON (first_stop.line_id = target_stop.line_id AND first_stop.order_no < target_stop.order_no) 
+    LEFT JOIN departures ON departures.line = first_stop.line_id
+    INNER JOIN route_parts ON (route_parts.id = departures.id AND first_stop.order_no = route_parts.stop_order)
+    INNER JOIN route_parts AS final_route ON (route_parts.departure = final_route.departure AND target_stop.order_no = final_route.stop_order)
+    WHERE first_stop.stop_id = first_stop_id AND target_stop.stop_id = target_stop_id
+    ORDER BY route_parts.hour ASC
+    LIMIT 0, 1 INTO departure_id, arrival_time; END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Final view structure for view `drivers_possible_vehicles`
+--
+
+/*!50001 DROP VIEW IF EXISTS `drivers_possible_vehicles`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`rahid`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `drivers_possible_vehicles` AS select `drivers`.`id` AS `id`,`drivers`.`name` AS `name`,`vehicles`.`id` AS `vehicle_id`,`vehicles`.`registration_number` AS `registration_number`,`vehicle_condition`.`description` AS `description` from ((((`drivers` left join `driver_permissions` on((`drivers`.`id` = `driver_permissions`.`driver`))) join `permissions` on((`driver_permissions`.`permission` = `permissions`.`id`))) join `vehicles` on((`vehicles`.`variant` = `permissions`.`vehicle_variant`))) left join `vehicle_condition` on((`vehicles`.`cond` = `vehicle_condition`.`id`))) where (`vehicle_condition`.`road_suitable` = 1) order by `drivers`.`id`,`vehicles`.`id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `lines_routes`
+--
+
+/*!50001 DROP VIEW IF EXISTS `lines_routes`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`rahid`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `lines_routes` AS select `transport`.`lines`.`id` AS `id`,`transport`.`lines`.`number` AS `number`,`transport`.`lines`.`first_stop` AS `first_stop`,`transport`.`lines`.`last_stop` AS `last_stop`,group_concat(`transport`.`stops`.`name` separator ', ') AS `GROUP_CONCAT(stops.name SEPARATOR ', ')` from ((`transport`.`lines` left join (select `transport`.`lines_stops`.`line_id` AS `line_id`,`transport`.`lines_stops`.`stop_id` AS `stop_id`,`transport`.`lines_stops`.`order_no` AS `order_no` from `transport`.`lines_stops` order by `transport`.`lines_stops`.`order_no`) `ls` on((`ls`.`line_id` = `transport`.`lines`.`id`))) left join `transport`.`stops` on((`ls`.`stop_id` = `transport`.`stops`.`id`))) group by `transport`.`lines`.`id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -780,4 +918,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-15 13:11:17
+-- Dump completed on 2016-12-19  0:24:03

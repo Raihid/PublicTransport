@@ -1,0 +1,11 @@
+<h2>Awaria o numerze <%= @difficulty["id"] %></h2>
+<strong>Rodzaj problemu:</strong>
+<p> <%= @difficulty["difficulty_name"] %> </p>
+<strong>Opis awarii:</strong>
+<p><%= @difficulty["description"] %></p>
+<strong>Jak zaradzić?</strong>
+<p>Skontaktuj się z organizacją <%= @difficulty["name"] %>.<br/>
+Numer telefonu: <%= @difficulty["phone"] %> <br/>
+Czynne w godzinach: <%= @difficulty["working_hours"] %>
+</p>
+
