@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'schedule#index'
 
   get 'lines/:line_id/:id' => 'lines#schedule'
+  get 'stops/search/:name' => 'stops#search'
   get 'drivers/search/:name' => 'drivers#search'
   resources :lines
   resources :departures

@@ -19,4 +19,10 @@ class StopsController < ApplicationController
         departures_records = ActiveRecord::Base.connection.exec_query(departures_sql)
         @departures = departures_records.to_hash
     end
+    def search
+        stops_sql = "SELECT * FROM stops WHERE name LIKE '%#{params[:name]}%'" 
+        @stops = ActiveRecord::Base.connection.exec_query(stops_sql).to_hash
+        count_sql = "SELECT COUNT(*) AS stop_num FROM (#{stops_sql}) t1" 
+        @count = ActiveRecord::Base.connection.exec_query(count_sql).to_hash[0]["stop_num"]
+    end
 end

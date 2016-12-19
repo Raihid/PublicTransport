@@ -562,7 +562,7 @@ CREATE TABLE `stops` (
 
 LOCK TABLES `stops` WRITE;
 /*!40000 ALTER TABLE `stops` DISABLE KEYS */;
-INSERT INTO `stops` VALUES (1,'Bieżanowska',NULL,NULL,1),(2,'Czerwone Maki',NULL,NULL,1),(3,'Nowy Bieżanów',NULL,NULL,1),(4,'Krowodrza Górka',NULL,NULL,1),(5,'Bronowice',NULL,NULL,1),(6,'Borek Fałęcki',NULL,NULL,1),(7,'Kurdwanów',NULL,NULL,1),(8,'Teatr Bagatela',NULL,NULL,1),(9,'Filharmonia',NULL,NULL,1),(10,'Nowy Kleparz',NULL,NULL,1),(11,'Norymberska',NULL,NULL,1),(12,'Azory',NULL,NULL,1),(13,'Uniwersytet Rolniczy',NULL,NULL,1),(14,'Salwator',NULL,NULL,1),(15,'Salwator',NULL,NULL,1),(16,'Borek Fałęcki',NULL,NULL,1),(17,'Filharmonia',NULL,NULL,1),(18,'Cichy Kącik',NULL,NULL,1),(19,'Dworzec Towarowy',NULL,NULL,1),(20,'Rondo Matecznego',NULL,NULL,1),(21,'Lipińskiego',NULL,NULL,1),(22,'Korona',NULL,NULL,1),(23,'Dworcowa',NULL,NULL,1),(24,'Dworzec Główny',NULL,NULL,1),(25,'Miasteczko Studenckie AGH',NULL,NULL,1);
+INSERT INTO `stops` VALUES (1,'Bieżanowska',NULL,NULL,1),(2,'Czerwone Maki',NULL,NULL,1),(3,'Nowy Bieżanów',NULL,NULL,1),(4,'Krowodrza Górka',NULL,NULL,1),(5,'Bronowice',NULL,NULL,1),(6,'Borek Fałęcki',NULL,NULL,1),(7,'Kurdwanów',NULL,NULL,1),(8,'Teatr Bagatela',NULL,NULL,1),(9,'Filharmonia',NULL,NULL,1),(10,'Nowy Kleparz',NULL,NULL,1),(11,'Norymberska',NULL,NULL,1),(12,'Azory',NULL,NULL,1),(13,'Uniwersytet Rolniczy',NULL,NULL,1),(14,'Salwator',NULL,NULL,1),(17,'Filharmonia',NULL,NULL,1),(18,'Cichy Kącik',NULL,NULL,1),(19,'Dworzec Towarowy',NULL,NULL,1),(20,'Rondo Matecznego',NULL,NULL,1),(21,'Lipińskiego',NULL,NULL,1),(22,'Korona',NULL,NULL,1),(23,'Dworcowa',NULL,NULL,1),(24,'Dworzec Główny',NULL,NULL,1),(25,'Miasteczko Studenckie AGH',NULL,NULL,1);
 /*!40000 ALTER TABLE `stops` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -918,4 +918,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-19  0:24:03
+-- Dump completed on 2016-12-19  1:15:01

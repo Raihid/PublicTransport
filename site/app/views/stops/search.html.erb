@@ -1,0 +1,5 @@
+Odnalezione przystanki:
+<% @stops.each do |stop| %>
+  <a href="/stops/<%= stop["id"] %>"><%= stop["name"] %></a>
+<% end %>
+  Liczba odnalezionych przystanków: <%= @count %>
