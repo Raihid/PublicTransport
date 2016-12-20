@@ -1,12 +1,12 @@
-table count: at least 13 # Wrzucaj je wszędzie
+table count: at least 12 # Wrzucaj je wszędzie
 select, insert, delete - ?!?! # Mało update'ów 
 transactions - 5 # Kupowanie biletów, dodawanie linii?...
 procedures - 1 # Co jeszcze?
 full-text search - 1
 triggers - 2 # Sprawdz czy kierowca nie ma w tym czase innej linii na głowie
 constraints: unique, foreign - 3, 0 # No ziom
-like - 1 # użytkownicy, wyszukiwanie kierowcy
 between - 2 # wyszukiwanie linii 
+--- like - 0 # użytkownicy, wyszukiwanie kierowcy
 --- joins: left, inner, right, union  - 0 # Więcej nie-inner
 --- functions - 0 # Yay!
 --- views - 0

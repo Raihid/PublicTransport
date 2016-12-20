@@ -1,6 +1,6 @@
 class StopsController < ApplicationController
     def index
-        @stops = Stop.all
+        @stops = Stop.order(:name)
     end
     def show
         @stop = Stop.find(params[:id])
