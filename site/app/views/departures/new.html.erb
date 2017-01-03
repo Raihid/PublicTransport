@@ -1,0 +1,20 @@
+<h1>Dodaj odjazd</h1>
+<%= form_for :departure, url: departures_path do |f| %>
+    <%= f.label :departure_hour %> 
+    <%= f.text_field :departure_hour %>
+
+    <%= f.label :driver %>
+    <%= f.text_field :driver %>
+
+    <%= f.label :vehicle %>
+    <%= f.text_field :vehicle %>
+  
+    <% @stops.each do |stop| %>
+        <label><%= stop["name"] %></label>
+        <input class="time-field" name="depart[<%= stop["id"] %>" type="text" />
+        <br/>
+    <% end %>
+    <p>
+        <%= f.submit %>
+    </p>
+<% end %>

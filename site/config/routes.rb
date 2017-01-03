@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'lines/:line_id/:id' => 'lines#schedule'
   get 'stops/search/:name' => 'stops#search'
   get 'drivers/search/:name' => 'drivers#search'
+  get 'departures/pickline/' => 'departures#pickline'
+  get 'departures/new/:line/' => 'departures#new'
   resources :lines
   resources :departures
   resources :stops
