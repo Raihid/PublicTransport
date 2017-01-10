@@ -1,6 +1,7 @@
 Dzień dobry!
 <div>
   <h3>Dostępne przystanki:</h3>
+  Mamy w systemie <%= @count %> przystanków.
   <ul>
   <% @stops.each do |stop| %>
     <li><%= link_to stop.name, stop_path(stop) %> </li>

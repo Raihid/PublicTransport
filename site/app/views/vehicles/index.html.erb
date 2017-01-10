@@ -1,4 +1,4 @@
-Lista posiadanego przez nas sprzętu
+Znaleziono <%= @count %> sztuk sprzętu.
 <% @vehicles.each do |vehicle| %>
 <div class="vehicle">
   <%= "#{vehicle["variant"]} o numerze rejestracyjnym #{vehicle["registration_number"]} jest wart #{vehicle["value"]}zł. Jego stan: #{vehicle["vcondition"]}." %><br/>

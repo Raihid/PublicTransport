@@ -1,0 +1,31 @@
+
+<h1>Dodaj kierowcę</h1>
+<%= form_for :driver, url: drivers_path do |f| %>
+  <p>
+  <%= f.label :name %><br/>
+    <%= f.text_field :name %>  
+  </p>
+
+  <p>
+  <%= f.label :age %><br/>
+    <%= f.text_field :age %>  
+  </p>
+  <p>
+  <%= f.label :pesel %><br/>
+    <%= f.text_field :pesel; %>  
+  </p>
+
+  <ul><%= f.label "Pozwolenia"%><br/>
+    <% @permission_options.each do |permission| %>
+      <li>
+      <%= check_box_tag "permissions[]", permission[1] %>
+      <%= permission[0] %> 
+      </li>
+    <% end %>
+     
+  </ul>
+    <p>
+        <%= f.submit %>
+    </p>
+<% end %>
+

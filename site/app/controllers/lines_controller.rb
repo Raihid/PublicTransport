@@ -4,6 +4,7 @@ class LinesController < ApplicationController
         FROM `lines` INNER JOIN stops first_stop_record ON first_stop_record.id = `lines`.first_stop
         INNER JOIN stops last_stop_record ON last_stop_record.id = `lines`.last_stop "
         @lines = ActiveRecord::Base.connection.select_all(sql).to_hash
+        @count = ActiveRecord::Base.connection.select_all("SELECT COUNT(*) as num FROM `lines`").to_hash[0]["num"]
     end
 
     def new
@@ -19,7 +20,13 @@ class LinesController < ApplicationController
                  INNER JOIN stops ON stops.id = lines_stops.stop_id
                  WHERE `lines`.id = #{params[:id]}"
         stop_records = ActiveRecord::Base.connection.exec_query(stops_sql)
+        @time = ActiveRecord::Base.connection.exec_query("SELECT averageTimeDistance(#{params[:id]}) as time")
+                                  .to_hash[0]["time"] 
         @stops = stop_records.to_hash
+        count_sql = "SELECT COUNT(*) as num FROM lines_stops 
+                     WHERE line_id = #{params[:id]}"
+        @count = ActiveRecord::Base.connection.exec_query(count_sql).to_hash[0]["num"]
+
     end
 
     def schedule

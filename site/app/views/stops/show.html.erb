@@ -1,10 +1,17 @@
 Dzień dobry, z tej strony przystanek <h3><%= "#{@stop.name}!" %></h3>Takie linie po mnie jeżdżą:
 <ul>
 <% @lines.each do |line| %>
-  <li><a href="/line/<%=line["id"]%>"><%= line["number"] %></a></li>
+  <li><a href="/lines/<%=line["id"]%>"><%= line["number"] %></a></li>
 <% end %>
+</ul>
 
+Odjazdy:
+<ul>
 <% @departures.each do |departure| %>
-  <%= "#{departure["number"]} - #{departure["hour"]}" %>
+  <li>
+  <%= "#{departure["number"]} - #{departure["hour"].hour.to_s.rjust(2, "0")}:#{departure["hour"].min.to_s.rjust(2, "0")}" %>
+  </li>
 <% end %>
+</ul>
+
 </ul>

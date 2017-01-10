@@ -9,3 +9,12 @@
 </p>
 <% end %>
 <%= link_to "Zgłoś nową awarię", new_difficulty_path() %>
+
+
+
+<h4>Wyszukaj wśród utrudnień:</h4>
+<%= form_tag "/difficulties/search/", :method => 'get' do %> 
+  <%= text_field_tag "q" %>
+  <%= submit_tag %>
+<% end %>
+</div>

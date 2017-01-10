@@ -2,9 +2,13 @@ Rails.application.routes.draw do
   get 'schedule/index'
   root 'schedule#index'
 
+
+  get 'schedule/advanced/' => 'schedule#advanced'
+  post 'schedule/results/' => 'schedule#results'
   get 'lines/:line_id/:id' => 'lines#schedule'
   get 'stops/search/:name' => 'stops#search'
-  get 'drivers/search/:name' => 'drivers#search'
+  get 'drivers/search/' => 'drivers#search'
+  get 'difficulties/search/' => 'difficulties#search'
   get 'departures/pickline/' => 'departures#pickline'
   get 'departures/new/:line/' => 'departures#new'
   resources :lines

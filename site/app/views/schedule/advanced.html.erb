@@ -1,0 +1,8 @@
+<h2>Szukanie zaawansowane</h2>
+<%= form_for :schedule, url: "/schedule/results" do |f| %> 
+  <div>Przystanek: <%= f.select(:stop, options_for_select(@stop_options)) %></div>
+  <div>Linia: <%= f.select(:line, options_for_select(@lines_options)) %></div>
+  <div>Odjazd po: <%= f.select(:depart_after_h, options_for_select(@hour_options)) %> <%= f.select(:depart_after_m, options_for_select(@min_options)) %>
+  <div>Odjazd przed: <%= f.select(:depart_before_h, options_for_select(@hour_options)) %> <%= f.select(:depart_before_m, options_for_select(@min_options)) %>
+  <%= f.submit %>
+<% end %>

@@ -1,6 +1,7 @@
 class StopsController < ApplicationController
     def index
         @stops = Stop.order(:name)
+        @count = ActiveRecord::Base.connection.exec_query("SELECT COUNT(*) as num FROM stops")[0]["num"]
     end
     def show
         @stop = Stop.find(params[:id])

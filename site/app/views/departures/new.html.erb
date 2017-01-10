@@ -1,19 +1,31 @@
-<h1>Dodaj odjazd</h1>
+<h1>Dodaj odjazd dla linii numer <%= @line["number"] %></h1>
 <%= form_for :departure, url: departures_path do |f| %>
+  <div>
     <%= f.label :departure_hour %> 
-    <%= f.text_field :departure_hour %>
+    <%= f.select(:departure_hour_h, options_for_select(@hour_options)) %>
+    <%= f.select(:departure_hour_m, options_for_select(@min_options)) %>
+  </div>
 
+  <div>
     <%= f.label :driver %>
-    <%= f.text_field :driver %>
+    <%= f.select(:driver, options_for_select(@drivers_options)) %>
+  </div>
 
+  <div>
     <%= f.label :vehicle %>
-    <%= f.text_field :vehicle %>
-  
+    <%= f.select(:vehicle, options_for_select(@vehicles_options)) %>
+  </div>
+
     <% @stops.each do |stop| %>
+      <div>
         <label><%= stop["name"] %></label>
-        <input class="time-field" name="depart[<%= stop["id"] %>" type="text" />
-        <br/>
+        <%# <input class="time-field" name="depart[<%= stop["id"] " type="text" /> %>
+        <%= f.select("depart[#{stop["order_no"]}][hour]", options_for_select(@hour_options)) %>
+        <%= f.select("depart[#{stop["order_no"]}][min]", options_for_select(@min_options)) %>
+      <br/>
+    </div>
     <% end %>
+    <%= f.hidden_field "line", :value => @line["id"] %> 
     <p>
         <%= f.submit %>
     </p>

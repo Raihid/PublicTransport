@@ -1,6 +1,9 @@
 <h1>Dodaj utrudnienie</h1>
 <%= form_for :difficulty, url: difficulties_path do |f| %>
   <p>
+
+  <%= f.label :title %><br/>
+    <%= f.text_field :title %>  
   <%= f.label :description %><br/>
     <%= f.text_area :description %>  
   </p>

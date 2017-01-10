@@ -1,11 +1,11 @@
-table count: at least 12 # Wrzucaj je wszędzie
-select, insert, delete - ?!?! # Mało update'ów 
-transactions - 5 # Kupowanie biletów, dodawanie linii?...
-procedures - 1 # Co jeszcze?
-full-text search - 1
-triggers - 2 # Sprawdz czy kierowca nie ma w tym czase innej linii na głowie
-constraints: unique, foreign - 3, 0 # No ziom
-between - 2 # wyszukiwanie linii 
+table count: at least 9 # Wrzucaj je wszędzie
+transactions - 3 # Neglected Drivers, kupowanie biletów?
+--- procedures - 0 # NeglectedDrivers
+--- full-text search - 0 # Utrudnienia
+--- triggers - 0 # Sprawdz czy kierowca nie ma w tym czase innej linii na głowie. Parytety?
+--- constraints: unique, foreign - 0, 0 # No ziom
+--- select, insert, delete - ?!?! # Mało update'ów 
+--- between - 0 # wyszukiwanie linii 
 --- like - 0 # użytkownicy, wyszukiwanie kierowcy
 --- joins: left, inner, right, union  - 0 # Więcej nie-inner
 --- functions - 0 # Yay!
@@ -14,3 +14,9 @@ between - 2 # wyszukiwanie linii
 --- subqueries - 0
 --- order - 0 # proste, znajdzie się gdziekolwiek
 
+
+
+Na później:
+1) Pododawaj trasy linii i kilka przejazdów do każdej linii
+2) linii
+3) Podpiąć procedury i funkcję

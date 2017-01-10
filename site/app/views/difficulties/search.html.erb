@@ -1,0 +1,10 @@
+<%= "Odnaleziono #{@count} wyników:" %>
+<ul>
+<% @results.each do |result| %>
+  <li>
+  <a href="/difficulties/<%= result["id"] %>"><%= "#{result["title"]} - #{result["description"]}" %></a>
+  </li>
+  
+<% end %>
+</ul>
+

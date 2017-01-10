@@ -17,7 +17,7 @@ class DifficultiesController < ApplicationController
         end
     end
     def create
-        @difficulty = Difficulty.new(params[:difficulty].permit(:description, :line, :diff_type))
+        @difficulty = Difficulty.new(params[:difficulty].permit(:title, :description, :line, :diff_type))
         @difficulty.save
         # INSERT INTO difficulties(description, line) VALUES (:description, :line);
         redirect_to difficulty_path(@difficulty)
@@ -39,6 +39,12 @@ class DifficultiesController < ApplicationController
                           LEFT JOIN difficulty_repairman ON difficulty_type.repairman = difficulty_repairman.id
                           WHERE difficulties.id = #{params[:id]}"
         @difficulty = ActiveRecord::Base.connection.exec_query(difficulty_sql).to_hash[0]
+
+    end
+    def search
+        query_sql = "SELECT * FROM difficulties WHERE MATCH(title,description) AGAINST('#{params["q"]}')"
+        @results = ActiveRecord::Base.connection.exec_query(query_sql).to_hash
+        @count = @results.length
 
     end
 end

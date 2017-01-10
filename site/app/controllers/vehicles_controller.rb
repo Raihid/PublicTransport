@@ -8,6 +8,7 @@ class VehiclesController < ApplicationController
         average_sql = "SELECT AVG(vehicle_condition.score) as average FROM vehicles
                        LEFT JOIN vehicle_condition ON vehicle_condition.id = vehicles.cond"
         @average = ActiveRecord::Base.connection.exec_query(average_sql).to_hash[0]["average"]
+        @count = ActiveRecord::Base.connection.exec_query("SELECT COUNT(*) as num FROM vehicles").to_hash[0]["num"]
     end
     def search
          

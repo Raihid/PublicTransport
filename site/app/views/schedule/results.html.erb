@@ -1,0 +1,8 @@
+Oto wyniki!
+
+<% @results.each do |result| %>
+  <div>
+  <%= "Z przystanku #{result["name"]} odjeżdża linia numer #{result["number"]} o godzinie" %>  
+  <%= result["hour"].hour.to_s + ":" + result["hour"].min.to_s %>
+  </div>
+<% end %>
