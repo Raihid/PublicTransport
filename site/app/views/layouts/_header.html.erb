@@ -3,12 +3,13 @@
 </div>
 <div id="menu">
   <ul>
-    <li><a href="">Strona główna</a></li>
+    <li><a href="/">Strona główna</a></li>
     <li><%= link_to "Rozkłady", schedule_index_path() %></li>
     <li><%= link_to "Awarie", difficulties_path() %></li>
     <li><%= link_to "Nasi kierowcy",  drivers_path() %></li>
-    <li><a href="/vehicles">Nasze pojazdy</a></li>
-    <li><a href="/contact">Kontakt</a></li>
+    <li><%= link_to "Nasze pojazdy", vehicles_path() %></li>
+    <li><%= link_to "Kontakt",  "/contact" %></li>
   </ul>
 </div>
+<div id="content">
 

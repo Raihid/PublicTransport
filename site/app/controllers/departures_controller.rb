@@ -43,7 +43,6 @@ class DeparturesController < ApplicationController
     def create
         data = params["departure"]
         arrival = data["depart"].max_by { |k, v| v["hour"]*24  + v["min"] }[0]
-        puts arrival
         arrival_hour = "\"#{data["depart"][arrival]["hour"]}:#{data["depart"][arrival]["min"]}:00\""
         ActiveRecord::Base.connection.exec_query("START TRANSACTION;")
         insert_sql = "INSERT INTO departures(departure_hour, arrival_hour, day, line, vehicle, driver)
@@ -59,5 +58,6 @@ class DeparturesController < ApplicationController
          
         sql = "COMMIT;"
         ActiveRecord::Base.connection.exec_query(sql)
+        @line = data["line"]
     end
 end

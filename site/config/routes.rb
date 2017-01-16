@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'contact/index'
+
   get 'schedule/index'
   root 'schedule#index'
 
@@ -11,6 +13,7 @@ Rails.application.routes.draw do
   get 'difficulties/search/' => 'difficulties#search'
   get 'departures/pickline/' => 'departures#pickline'
   get 'departures/new/:line/' => 'departures#new'
+  get 'contact' => 'contact#index'
   resources :lines
   resources :departures
   resources :stops

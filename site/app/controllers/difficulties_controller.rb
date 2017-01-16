@@ -19,7 +19,9 @@ class DifficultiesController < ApplicationController
     def create
         @difficulty = Difficulty.new(params[:difficulty].permit(:title, :description, :line, :diff_type))
         @difficulty.save
-        # INSERT INTO difficulties(description, line) VALUES (:description, :line);
+        # BEGIN TRANSACTION; 
+        # INSERT INTO difficulties(description, line) VALUES (:description, :line); 
+        # END TRANSACTION;
         redirect_to difficulty_path(@difficulty)
 
     end

@@ -1,3 +1,5 @@
+
+<h2>Wybierz linię, na której chcesz dodać przejazd</h2>
 <% @lines.each do |line| %> 
     <div>
         <a href="/departures/new/<%= line["id"] %>"><%= "#{line["number"]}. #{line["first_stop_name"]} => #{line["last_stop_name"]}" %></a>

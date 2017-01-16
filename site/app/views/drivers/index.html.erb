@@ -7,7 +7,7 @@
   
 <% end %>
 
-<h4>Znajdź kierowcę</h4>
+<h3>Znajdź kierowcę</h3>
 <%= form_tag "/drivers/search/", :method => 'get' do %> 
   <div>Nazwisko kierowcy:</div> <%= text_field_tag :name %>
   <div>Minimalny wiek kierowcy:</div> <%= text_field_tag :age_min %>
@@ -16,3 +16,4 @@
 <% end %>
 </div>
 
+<h4><a href="/drivers/new/">Dodaj kierowcę do systemu</h4>

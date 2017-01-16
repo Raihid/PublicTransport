@@ -142,7 +142,7 @@ CREATE TABLE `departures` (
   CONSTRAINT `departures_ibfk_2` FOREIGN KEY (`line`) REFERENCES `lines` (`id`),
   CONSTRAINT `departures_ibfk_3` FOREIGN KEY (`vehicle`) REFERENCES `vehicles` (`id`),
   CONSTRAINT `departures_ibfk_4` FOREIGN KEY (`driver`) REFERENCES `drivers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `departures` (
 
 LOCK TABLES `departures` WRITE;
 /*!40000 ALTER TABLE `departures` DISABLE KEYS */;
-INSERT INTO `departures` VALUES (1,'06:30:00','07:15:00',1,1,3,1),(2,'07:00:00','07:45:00',1,1,1,2),(3,'07:30:00','08:15:00',1,1,3,1),(4,'08:00:00','08:45:00',1,1,1,2),(5,'08:30:00','09:15:00',1,1,3,1),(6,'09:00:00','09:45:00',1,1,1,2),(7,'09:30:00','10:15:00',1,1,3,1),(8,'15:31:00','16:00:00',1,3,2,3),(9,'16:01:00','16:30:00',1,4,2,3),(10,'16:31:00','17:00:00',1,3,2,3),(11,'17:01:00','17:30:00',1,4,2,3),(27,'14:00:00','14:30:00',1,1,1,1),(28,'12:00:00','12:30:00',1,7,3,2),(29,'13:00:00','13:30:00',1,7,3,2);
+INSERT INTO `departures` VALUES (1,'06:30:00','07:15:00',1,1,3,1),(2,'07:00:00','07:45:00',1,1,1,2),(3,'07:30:00','08:15:00',1,1,3,1),(4,'08:00:00','08:45:00',1,1,1,2),(5,'08:30:00','09:15:00',1,1,3,1),(6,'09:00:00','09:45:00',1,1,1,2),(7,'09:30:00','10:15:00',1,1,3,1),(8,'15:31:00','16:00:00',1,3,2,3),(9,'16:01:00','16:30:00',1,4,2,3),(10,'16:31:00','17:00:00',1,3,2,3),(11,'17:01:00','17:30:00',1,4,2,3),(27,'14:00:00','14:30:00',1,1,1,1),(28,'12:00:00','12:30:00',1,7,3,2),(29,'13:00:00','13:30:00',1,7,3,2),(30,'15:25:00','16:00:00',1,1,4,12),(31,'16:00:00','16:35:00',1,1,3,1);
 /*!40000 ALTER TABLE `departures` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -198,7 +198,7 @@ CREATE TABLE `difficulties` (
 
 LOCK TABLES `difficulties` WRITE;
 /*!40000 ALTER TABLE `difficulties` DISABLE KEYS */;
-INSERT INTO `difficulties` VALUES (10,NULL,NULL,'Ostrzeżenie','Bardzo smutna wiadomość',1,NULL),(11,NULL,NULL,'Ostrzeżenie','Człowiek w czerni się awanturuje.',1,NULL),(12,NULL,NULL,'Ostrzeżenie','Sowy nie są tym, czym się wydają.',1,3),(13,NULL,NULL,'Ostrzeżenie','She\'s dead, wrapped in plastic.',1,7),(14,NULL,NULL,'Ostrzeżenie','Gołąb spłonął na kablu.',5,1),(15,NULL,NULL,'Ostrzeżenie','Za gorąco, ej.',1,2),(16,NULL,NULL,NULL,'Na trakcję linii updało drzewo, przerwało linię trakcyjną. To chyba świerk.',5,1),(17,NULL,NULL,'Jest bardzo gorąco, pękła szyna','Proszę uważać na dzikie zwierzęta, które kręcą się w okolicy.',6,2);
+INSERT INTO `difficulties` VALUES (10,NULL,NULL,'Tragiczny wypadek','Bardzo smutna wiadomość',1,NULL),(11,NULL,NULL,'Wybuchła bójka','Człowiek w czerni się awanturuje.',1,NULL),(12,NULL,NULL,'Potrzebny Agent Cooper!','Sowy nie są tym, czym się wydają.',1,3),(13,NULL,NULL,'Ostrzeżenie','She\'s dead, wrapped in plastic.',1,7),(14,NULL,NULL,'Ptak się spalił','Gołąb spłonął na kablu.',5,1),(16,NULL,NULL,'Upadek drzewa','Na trakcję linii updało drzewo, przerwało linię trakcyjną. To chyba świerk.',5,1),(17,NULL,NULL,'Jest bardzo gorąco, pękła szyna','Proszę uważać na dzikie zwierzęta, które kręcą się w okolicy.',6,2);
 /*!40000 ALTER TABLE `difficulties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -297,7 +297,7 @@ CREATE TABLE `drivers` (
   UNIQUE KEY `pesel` (`pesel`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `drivers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,7 +306,7 @@ CREATE TABLE `drivers` (
 
 LOCK TABLES `drivers` WRITE;
 /*!40000 ALTER TABLE `drivers` DISABLE KEYS */;
-INSERT INTO `drivers` VALUES (1,'Jan Kowalski',40,'555555',NULL),(2,'Marta Nowak',25,'333',NULL),(3,'Kamil Pędziwilk',32,'444',NULL),(4,'Robert Sańko',19,'5555',NULL),(5,'Test testowy',123,'255255255',NULL),(12,'Michał Turnau',29,'01234567',NULL);
+INSERT INTO `drivers` VALUES (1,'Jan Kowalski',40,'555555',NULL),(2,'Marta Nowak',25,'333',NULL),(3,'Kamil Pędziwilk',32,'444',NULL),(4,'Robert Sańko',19,'5555',NULL),(5,'Test testowy',123,'255255255',NULL),(12,'Michał Turnau',29,'01234567',NULL),(13,'Jan Wilk',21,'554059405',NULL),(14,'Paweł Rosiński',54,'99909990',NULL);
 /*!40000 ALTER TABLE `drivers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -515,7 +515,7 @@ CREATE TABLE `route_parts` (
   PRIMARY KEY (`id`),
   KEY `departure` (`departure`),
   CONSTRAINT `route_parts_ibfk_1` FOREIGN KEY (`departure`) REFERENCES `departures` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -524,7 +524,7 @@ CREATE TABLE `route_parts` (
 
 LOCK TABLES `route_parts` WRITE;
 /*!40000 ALTER TABLE `route_parts` DISABLE KEYS */;
-INSERT INTO `route_parts` VALUES (1,1,'06:30:00',1),(2,1,'06:35:00',2),(3,1,'06:40:00',3),(13,27,'14:00:00',1),(14,27,'14:05:00',2),(15,27,'14:10:00',3),(16,27,'14:15:00',4),(17,27,'14:20:00',5),(18,27,'14:25:00',6),(19,27,'14:30:00',7),(20,28,'12:30:00',5),(21,28,'12:10:00',2),(22,28,'12:15:00',3),(23,28,'12:20:00',4),(24,29,'13:00:00',1),(25,29,'13:05:00',2),(26,29,'13:10:00',3),(27,29,'13:15:00',4),(28,29,'13:30:00',5),(29,28,'12:05:00',1);
+INSERT INTO `route_parts` VALUES (1,1,'06:30:00',1),(2,1,'06:35:00',2),(3,1,'06:40:00',3),(13,27,'14:00:00',1),(14,27,'14:05:00',2),(15,27,'14:10:00',3),(16,27,'14:15:00',4),(17,27,'14:20:00',5),(18,27,'14:25:00',6),(19,27,'14:30:00',7),(20,28,'12:30:00',5),(21,28,'12:10:00',2),(22,28,'12:15:00',3),(23,28,'12:20:00',4),(24,29,'13:00:00',1),(25,29,'13:05:00',2),(26,29,'13:10:00',3),(27,29,'13:15:00',4),(28,29,'13:30:00',5),(29,28,'12:05:00',1),(30,30,'15:30:00',1),(31,30,'15:35:00',2),(32,30,'15:40:00',3),(33,30,'15:45:00',4),(34,30,'15:50:00',5),(35,30,'15:55:00',6),(36,30,'16:00:00',7),(37,31,'16:05:00',1),(38,31,'16:10:00',2),(39,31,'16:15:00',3),(40,31,'16:20:00',4),(41,31,'16:25:00',5),(42,31,'16:30:00',6),(43,31,'16:35:00',7);
 /*!40000 ALTER TABLE `route_parts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -998,4 +998,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-16  1:53:30
+-- Dump completed on 2017-01-16 23:23:19

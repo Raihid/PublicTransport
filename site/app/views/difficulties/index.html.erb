@@ -5,7 +5,7 @@
 <% @difficulties.each do |difficulty| %>
   <a href="/difficulties/<%= difficulty["id"] %>"><%= difficulty["id"] %></a>
   Na linii numer <strong><%= difficulty["number"] %></strong>
-  <%= difficulty["description"] %>
+  <%= difficulty["title"] %>
 </p>
 <% end %>
 <%= link_to "Zgłoś nową awarię", new_difficulty_path() %>
